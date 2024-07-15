@@ -14,7 +14,7 @@ class FNAGame : Game
     }
 
     private SpriteBatch batch;
-    private Texture2D texture;
+    private Texture2D texture, paletteTexture;
     private Effect testEffect;
     
     private FNAGame()
@@ -29,11 +29,13 @@ class FNAGame : Game
     {
         // Create the batch...
         batch = new SpriteBatch(GraphicsDevice);
-
+        
         // ... then load a texture from ./Content/FNATexture.png
-        texture = Content.Load<Texture2D>("FNATexture");
+        texture = Content.Load<Texture2D>("TestSprite");
+        paletteTexture = Content.Load<Texture2D>("PALETTEPlayer");
+        
         // Effects can be loaded as content!
-        testEffect = Content.Load<Effect>("FNAEffect");
+        testEffect = Content.Load<Effect>("PaletteMap");
     }
 
     protected override void UnloadContent()
@@ -52,6 +54,8 @@ class FNAGame : Game
         batch.End();
         
         // Base texture with shader
+        testEffect.Parameters["TextureB"].SetValue(paletteTexture);
+        testEffect.Parameters["index"].SetValue(0);
         batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, testEffect);
         batch.Draw(texture, new Vector2(124,24), null, Color.White, 0, Vector2.Zero, scaleVector, SpriteEffects.None, 1);
 
